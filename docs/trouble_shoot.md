@@ -19,7 +19,7 @@ You need edit line 11 and line 13 of task, "vgcreate '{{ vg_configuration.VGNAME
 You need replace 'scsi' of 2 parts to 'ata' or 'nvme' in the following code. 
 
 ```
-    OS_DISK=$(ls -al /dev/disk/by-id/ | sed -e 's/\ /\n/g' | grep scsi | grep .*-part. | sed -n 1P | sed -e 's/\-part.//g')
+OS_DISK=$(ls -al /dev/disk/by-id/ | sed -e 's/\ /\n/g' | grep scsi | grep .*-part. | sed -n 1P | sed -e 's/\-part.//g')
 
-    for ID in `ls -al /dev/disk/by-id/ | grep -v -e 'sr0' -e $OS_DISK | sed -e 's/\ /\n/g' | grep 'scsi'`
+for ID in `ls -al /dev/disk/by-id/ | grep -v -e 'sr0' -e $OS_DISK | sed -e 's/\ /\n/g' | grep 'scsi'`
 ```
