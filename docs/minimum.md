@@ -96,8 +96,14 @@ Using variable list
     If all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
 
     ```sh
+    # kubernetes cluster nodes
+    vm-ws0@vm-w0:~$ k get nodes
+    NAME    STATUS   ROLES    AGE   VERSION
+    vm-w0   Ready    master   36m   v1.18.8
+    vm-w1   Ready    master   32m   v1.18.8
+    vm-w2   Ready    master   28m   v1.18.8    
     # pods in ns, rook-ceph
-    vm-m0@vm-m0:~$ k get pod -n rook-ceph 
+    vm-w0@vm-w0:~$ k get pod -n rook-ceph 
     NAME                                                            READY   STATUS      RESTARTS   AGE
     csi-cephfsplugin-4qktn                                          3/3     Running     0          6m5s
     csi-cephfsplugin-bgbbz                                          3/3     Running     0          6m5s

@@ -19,3 +19,5 @@ This playbook construct 2 components.
 * [minimum cluster](docs/minimum.md)
 
 * [big cluster](docs/big.md)
+
+* [trouble shoot](docs/trouble_shoot.md)

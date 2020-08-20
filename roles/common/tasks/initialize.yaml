@@ -1,9 +1,9 @@
-- name: apt update & apt upgrade
-  become: true
-  apt:
-    upgrade: safe
-    update_cache: yes
-    state: latest   
+# - name: apt update & apt upgrade
+#   become: true
+#   apt:
+#     upgrade: safe
+#     update_cache: yes
+#     state: latest   
 
 - name: allow port 22 for ssh
   become: true
