@@ -61,13 +61,22 @@ I have verified the operation with the following configuration.
     $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP
     ```
 
+    2. answer password to use ansible-vault.
+
+        ```bash
+        ...
+        New Vault password: 
+        Confirm New Vault password:
+        ```
+
 2. create rbd
 
     1. running shell script.
 
         ```bash
-        $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP -e ceph_type=rbd
+        $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP rbd
         ```
+
     2. answer password to use ansible-vault.
 
         ```bash

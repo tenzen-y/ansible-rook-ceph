@@ -2,10 +2,13 @@
 
 # create ansible.cfg
 
+echo "------------------------------"
 echo "set following value"
 echo "ssh config path: "$1
 echo "ssh public key: "$2
 echo "kube-apiserver vip: "$3
+echo "------------------------------"
+
 
 echo -n "[defaults]
 ask_vault_pass = True
@@ -33,4 +36,17 @@ echo -n "keepalived_configuration:
   APISERVER_VIP: \""$4"\"" > group_vars/all/keepalived_conf.yaml
 
 ansible-playbook -i hosts.yaml prepare.yaml -k
-ansible-playbook -i hosts.yaml create-cluster.yaml
+
+if [ -n "$5" ];then
+  if [ $5 == 'rbd' ];then
+    echo "----------"
+    echo "rbd mode"
+    echo "----------"
+    ansible-playbook -i hosts.yaml create-cluster.yaml -e ceph_type=rbd
+  fi
+else
+  echo "------------"
+  echo "cephfs mode"
+  echo "------------"
+  ansible-playbook -i hosts.yaml create-cluster.yaml
+fi
