@@ -59,9 +59,18 @@ I have verified the operation with the following configuration.
 
 2. create rbd
 
-    ```bash
-    $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP -e ceph_type=rbd
-    ```
+    1. running shell script.
+
+        ```bash
+        $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP -e ceph_type=rbd
+        ```
+    2. answer password to use ansible-vault.
+    
+        ```bash
+        ...
+        New Vault password: 
+        Confirm New Vault password:
+        ```
 
 ## Delete Rook/Ceph
 
