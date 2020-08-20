@@ -1,4 +1,0 @@
-keepalived_configuration:
-  ROUTER_ID: "51"
-  AUTH_PASS: "123"
-  APISERVER_VIP: "192.168.1.134"

@@ -1,8 +1,0 @@
-- name: register public key.
-  become: yes
-  authorized_key:
-    user: "{{ item }}"
-    state: present
-    key: "{{ lookup('file', '/Users/tenzen/.ssh/id_rsa.pub') }}"
-  with_items:
-    - "{{ ansible_ssh_user }}"
