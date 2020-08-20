@@ -4,6 +4,9 @@ This playbook construct 2 components.
 1. Multi Master K8s Cluster
 2. Rook/Ceph
 
+readme.md in Japanese.
+
+
 ## prepare
 
   * __All VM must access network.__
@@ -46,8 +49,8 @@ I have verified the operation with the following configuration.
 
 3. running ansible-playbook
 
-* SSH_CONF_PATH: full path of ssh config
-* SSH_KEY_PATH: full path of ssh public key
+* SSH_CONF_PATH: full path of ssh config in client.
+* SSH_KEY_PATH: full path of ssh public key in client.
 * VM_SUDO_PASS: sudo password in vm
 * KUBE_VIP: vip of kube-apiserver
 
