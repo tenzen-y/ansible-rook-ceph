@@ -34,7 +34,7 @@ I have verified the operation with the following configuration.
         ansible_ssh_user: $VM_UNAME
     ```
 
-2. edit ssh config
+2. edit ssh config in client machine
 
 * example
 
@@ -65,7 +65,7 @@ I have verified the operation with the following configuration.
         $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP -e ceph_type=rbd
         ```
     2. answer password to use ansible-vault.
-    
+
         ```bash
         ...
         New Vault password: 
