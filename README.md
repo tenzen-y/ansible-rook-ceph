@@ -12,7 +12,7 @@ This playbook construct 2 components.
 
   * __All VM must access network.__
   * __All Vm must run ssh server.__
-  * __Every K8s Worker VM must have 3 storage devices exclude OS Drive, which it is over 20GB.__
+  * __Every K8s Worker VM must have 3 or more storage devices exclude OS Drive, which it is 20GB or more.__
   * __Client machine must be installed sshpass.__
 
 I have verified the operation with the following configuration.
