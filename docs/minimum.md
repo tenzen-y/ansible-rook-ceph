@@ -93,8 +93,10 @@ Using variable list
         Confirm New Vault password:
         ```
 
-    Success!!!
+    If all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
+
     ```sh
+    # pods in ns, rook-ceph
     vm-m0@vm-m0:~$ k get pod -n rook-ceph 
     NAME                                                            READY   STATUS      RESTARTS   AGE
     csi-cephfsplugin-4qktn                                          3/3     Running     0          6m5s
