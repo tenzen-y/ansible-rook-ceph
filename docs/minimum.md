@@ -15,14 +15,14 @@ You need build 3 VMs.
 
 I have tested it in the following environments.
 
-|                      |  K8s Master and Worker VM  |
-| -------------------- | -------------------------- |
-| number of VM         |              3             |
-| capacities of memory |            16GB            |
-|       CPU core       |           4 vcpu           |
-|          OS          |    Ubuntu Serever 18.04    |
-|number of device exclude OS drive|        3        |
-|capacities of device exclude OS drive <br> in all VMs|20GB|
+|                          |  K8s Master and Worker VM  |
+| ------------------------ | -------------------------- |
+|    __number of VM__      |              3             |
+| __capacities of memory__ |            16GB            |
+|       __CPU core__       |           4 vcpu           |
+|          __OS__          |    Ubuntu Serever 18.04    |
+| __number of device exclude OS drive__ |       3       |
+| __capacities of device exclude OS drive <br> in all VMs__ |20GB|
 
 ## CREATE
 
