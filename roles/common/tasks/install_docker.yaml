@@ -1,0 +1,44 @@
+- name: apt update and install packages from apt
+  become: true
+  apt: 
+    update_cache: yes
+    name: 
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
+
+- name: add docker GPG apt key
+  become: true
+  apt_key:
+    id: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    state: present
+
+- name: add docker repository
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: present
+
+- name: install docker engine
+  become: true
+  apt:
+    update_cache: yes
+    name:
+    - docker-ce={{ docker_version }}
+
+- name: create docker daemon.json
+  become: true
+  copy:
+    dest: "/etc/docker/daemon.json"
+    src: "../files/daemon.json"
+    mode: "777"
+
+- name: restart docker engine by systemd
+  become: true
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker

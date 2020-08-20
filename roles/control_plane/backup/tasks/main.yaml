@@ -1,0 +1,4 @@
+---
+- import_tasks: "kubeadm.yaml"
+- import_tasks: "haproxy.yaml"
+- import_tasks: "keepalived.yaml"

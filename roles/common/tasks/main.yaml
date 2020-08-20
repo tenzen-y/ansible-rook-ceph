@@ -1,0 +1,4 @@
+---
+- import_tasks: "initialize.yaml"
+- import_tasks: "install_docker.yaml"
+- import_tasks: "install_kubernetes.yaml"

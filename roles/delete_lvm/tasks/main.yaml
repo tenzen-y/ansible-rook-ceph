@@ -1,0 +1,4 @@
+---
+- import_tasks: "vgremove.yaml"
+- import_tasks: "uninstall_lvmd.yaml"
+- import_tasks: "uninstall_lvm2.yaml"

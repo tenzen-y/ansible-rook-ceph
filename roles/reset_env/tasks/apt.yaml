@@ -1,0 +1,20 @@
+- name: enable swap
+  become: true
+  shell: "swapon"
+
+- name: uninstall kubeadm, kubectl and kubelet
+  become: true
+  apt:
+    state: absent
+    purge: true
+    name: 
+    - kubelet
+    - kubeadm
+
+- name: uninstall docker
+  become: true
+  apt:
+    state: absent
+    purge: true
+    autoremove: true
+    name: docker-ce

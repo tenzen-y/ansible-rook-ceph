@@ -1,0 +1,7 @@
+- name: apt uninstall lvm2
+  become: true
+  apt:
+    state: absent
+    purge: true
+    autoremove: true
+    name: lvm2

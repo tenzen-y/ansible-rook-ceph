@@ -1,0 +1,17 @@
+- name: set keepalived config
+  become: true
+  template:
+    src: "../templates/keepalived.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+
+- name: mkdir /etc/kubernetes/manifests
+  become: true
+  file:
+    path:  "/etc/kubernetes/manifests"
+    state: "directory"
+
+- name: create keepalived.yaml
+  become: true
+  copy:
+    dest: "/etc/kubernetes/manifests/keepalived.yaml"
+    src: "../../files/keepalived.yaml"

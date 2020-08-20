@@ -1,0 +1,58 @@
+- name: set kubeadm certification value.
+  debug:
+    msg: "{{ hostvars[item]['TOKEN'] }}"
+  with_items: "{{ groups['masterGroup'][0] }}"
+
+- name: set kubeadm certification value.
+  debug:
+    msg: "{{ hostvars[item]['DISCOVERY_TOKEN_CA_CERT'] }}"
+  with_items: "{{ groups['masterGroup'][0] }}"
+
+- name: set kubeadm certification value.
+  debug:
+    msg: "{{ hostvars[item]['CERTIFICATE_KEY'] }}"
+  with_items: "{{ groups['masterGroup'][0] }}"
+
+- name: kubeadm join control plane nodes.
+  become: true
+  shell: |
+    kubeadm join {{ keepalived_configuration.APISERVER_VIP }}:6443 \
+          --token {{ hostvars[item]['TOKEN'] }} \
+          --discovery-token-ca-cert-hash sha256:{{ hostvars[item]['DISCOVERY_TOKEN_CA_CERT'] }} \
+          --control-plane --certificate-key {{ hostvars[item]['CERTIFICATE_KEY'] }} \
+          --apiserver-bind-port=6444
+  with_items: "{{ groups['masterGroup'][0] }}"          
+
+- name: mkdir -p $HOME/.kube
+  file: 
+    path: "${HOME}/.kube"
+    state: "directory"
+    owner: "{{ ansible_effective_user_id }}"
+    group: "{{ ansible_effective_group_id }}" 
+
+- name: chmod /etc/kubernetes/admin.conf
+  become: true
+  file:
+    dest: "/etc/kubernetes/admin.conf"
+    mode: "604"
+
+- name: copy /etc/kubernetes/admin.conf to $HOME/.kube/config in remote host
+  shell: "cp /etc/kubernetes/admin.conf $HOME/.kube/config"
+
+- name: return "/etc/kubernetes/admin.conf" mode
+  become: true
+  file:
+    dest: "/etc/kubernetes/admin.conf"
+    mode: "600"
+
+- name: completion kubectl
+  shell: echo 'source <(kubectl completion bash)' >>~/.bashrc
+
+- name: completion kubectl
+  become: true
+  shell: kubectl completion bash >/etc/bash_completion.d/kubectl
+
+- name: alias kubectl
+  shell: |
+    echo 'alias k=kubectl' >>~/.bashrc
+    echo 'complete -F __start_kubectl k' >>~/.bashrc          

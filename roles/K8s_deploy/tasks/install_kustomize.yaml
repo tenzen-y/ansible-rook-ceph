@@ -1,0 +1,6 @@
+- name: copy binaryfile of kustomize
+  become: true
+  copy:
+    src: "../files/kustomize"
+    dest: "/usr/local/bin/kustomize"
+    mode: "755"

@@ -1,0 +1,37 @@
+- name: add kubeadm, kubectl and kubelet GPG apt key
+  become: true
+  apt_key:
+    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+    state: present
+
+- name: add kubeadm, kubectl and kubelet repository
+  become: true
+  apt_repository:
+    filename: "kubernetes"
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present 
+
+- name: install kubeadm, kubectl and kubelet
+  become: true
+  apt: 
+    update_cache: yes
+    name: 
+    - kubelet={{ K8s_version }}-00
+    - kubeadm={{ K8s_version }}-00
+
+- name: comment out swap-file-dir in /etc/fstab
+  become: true
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+- name: disable swap
+  become: true
+  shell: swapoff -a
+
+- name: mkdir /etc/kubernetes
+  become: true
+  file:
+    path: "/etc/kubernetes"
+    state: "directory"

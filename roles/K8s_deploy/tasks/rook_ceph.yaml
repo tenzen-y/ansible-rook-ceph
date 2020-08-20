@@ -1,0 +1,406 @@
+- name: check label topology.rook.io/rack=rackA in nodes
+  run_once: true
+  shell: |
+    STATUS="not exist"
+    LABEL=rackA
+
+    for LABELS in `kubectl get nodes --show-labels | grep $LABEL`
+      do
+        if [ -n "$LABELS" ];then
+          STATUS="exist"
+        fi
+      done
+    echo $STATUS
+  register: label_rackA
+
+- name: check label topology.rook.io/rack=rackB in nodes
+  run_once: true
+  shell: |
+    STATUS="not exist"
+    LABEL=rackB
+
+    for LABELS in `kubectl get nodes --show-labels | grep $LABEL`
+      do
+        if [ -n "$LABELS" ];then
+          STATUS="exist"
+        fi
+      done
+    echo $STATUS
+  register: label_rackB
+
+- name: check label topology.rook.io/rack=rackC in nodes
+  run_once: true
+  shell: |
+    STATUS="not exist"
+    LABEL=rackC
+
+    for LABELS in `kubectl get nodes --show-labels | grep $LABEL`
+      do
+        if [ -n "$LABELS" ];then
+          STATUS="exist"
+        fi
+      done
+    echo $STATUS
+  register: label_rackC
+
+- name: label nodes topology.rook.io/rack=rackA
+  run_once: true
+  shell: "kubectl label node {{ item }} topology.rook.io/rack=rackA"
+  with_items:
+    - "{{ groups['rackA'] }}"
+  when: "label_rackA.stdout_lines[0]=='not exist'"
+
+- name: label nodes topology.rook.io/rack=rackB
+  run_once: true
+  shell: "kubectl label node {{ item }} topology.rook.io/rack=rackB"
+  with_items:
+    - "{{ groups['rackB'] }}"
+  when: "label_rackB.stdout_lines[0]=='not exist'"    
+
+- name: labeled nodes topology.rook.io/rack=rackC
+  run_once: true
+  shell: "kubectl label node {{ item }} topology.rook.io/rack=rackC"
+  with_items:
+    - "{{ groups['rackC'] }}"
+  when: "label_rackC.stdout_lines[0]=='not exist'"
+
+- name: deploy K8s_manifest/rook-1.4.1/common.yaml
+  run_once: true
+  shell: "kubectl apply -f K8s_manifest/rook-1.4.1/common.yaml"
+
+- name: deploy K8s_manifest/rook-1.4.1/operator.yaml
+  run_once: true
+  shell: "kubectl apply -f K8s_manifest/rook-1.4.1/operator.yaml"
+
+- name: pause 5sec
+  run_once: true
+  pause:
+    seconds: "5"
+
+- name: waiting for start rook-ceph-operator pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-operator"
+
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+    if [ -n "$POD_NAME" ];then
+      STATUS="bad"
+    fi
+
+    echo $STATUS
+  register: operator_status
+  retries: 50
+  delay: 5
+  until: "operator_status.stdout_lines[0]=='ok'"
+
+- name: waiting for start rook-discover pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-discover"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: discover_status
+  retries: 50
+  delay: 5
+  until: "discover_status.stdout_lines[0]=='ok'" 
+
+- name: deploy K8s_manifest/rook-1.4.1/cluster-on-pvc.yaml
+  run_once: true
+  shell: "kubectl apply -f K8s_manifest/rook-1.4.1/cluster-on-pvc.yaml"
+
+- name: pause 5sec
+  run_once: true
+  pause:
+    seconds: "5"
+
+- name: waiting for finish rook-ceph-csi-detect-version pod...
+  run_once: true
+  shell: |
+    STATUS="running"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-csi-detect-version"
+
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL -o jsonpath='{.items[*].metadata.name}'`
+    if [ -z "$POD_NAME" ];then
+      STATUS="finish"
+    fi
+
+    echo $STATUS
+  register: rook_ceph_csi_detect_version_status
+  retries: 50
+  delay: 5
+  until: "rook_ceph_csi_detect_version_status.stdout_lines[0]=='finish'"
+
+- name: waiting for finish rook-ceph-detect-version pod...
+  run_once: true
+  shell: |
+    STATUS="running"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-detect-version"
+
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL -o jsonpath='{.items[*].metadata.name}'`
+    if [ -z "$POD_NAME" ];then
+      STATUS="finish"
+    fi
+
+    echo $STATUS
+  register: rook_ceph_detect_version_status
+  retries: 50
+  delay: 5
+  until: "rook_ceph_detect_version_status.stdout_lines[0]=='finish'"  
+
+- name: waiting for start csi-cephfsplugin-provisioner pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=csi-cephfsplugin-provisioner"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: csi_cephfsplugin_provisioner_status
+  retries: 50
+  delay: 5
+  until: "csi_cephfsplugin_provisioner_status.stdout_lines[0]=='ok'"
+
+- name: waiting for start csi-cephfsplugin pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=csi-cephfsplugin"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: csi_cephfsplugin_status
+  retries: 50
+  delay: 5
+  until: "csi_cephfsplugin_status.stdout_lines[0]=='ok'"  
+
+- name: waiting for start csi-rbdplugin-provisioner pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=csi-rbdplugin-provisioner"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: csi_rbdplugin_provisioner_status
+  retries: 50
+  delay: 5
+  until: "csi_rbdplugin_provisioner_status.stdout_lines[0]=='ok'"
+
+- name: waiting for start csi-rbdplugin pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=csi-rbdplugin"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: csi_rbdplugin_status
+  retries: 50
+  delay: 5
+  until: "csi_rbdplugin_status.stdout_lines[0]=='ok'"   
+
+- name: waiting for finish rook-ceph-mon-canary pod...
+  run_once: true
+  shell: |
+    STATUS="running"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="mon_canary=true"
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL -o jsonpath='{.items[*].metadata.name}'`
+
+    if [ -z "$POD_NAME" ];then
+      STATUS="finish"
+    fi
+
+    echo $STATUS
+  register: mon_canary_status
+  retries: 50
+  delay: 5
+  until: "mon_canary_status.stdout_lines[0]=='finish'"
+
+- name: pause 5sec
+  run_once: true
+  pause:
+    seconds: "5"  
+
+- name: 1st | waiting for start rook-ceph-mon pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-mon"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: mon_status
+  retries: 50
+  delay: 5
+  until: "mon_status.stdout_lines[0]=='ok'"
+
+- name: pause 15sec
+  run_once: true
+  pause:
+    seconds: "15"
+
+- name: 2nd | waiting for start rook-ceph-mon pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-mon"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: mon_status
+  retries: 50
+  delay: 5
+  until: "mon_status.stdout_lines[0]=='ok'"      
+
+- name: waiting for start rook-ceph-mgr pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-mgr"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: mgr_status
+  retries: 50
+  delay: 5
+  until: "mgr_status.stdout_lines[0]=='ok'"
+
+- name: pause 10sec
+  run_once: true
+  pause:
+    seconds: "10"    
+
+- name: waiting for complete rook-ceph-osd-prepare pod...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-osd-prepare"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Succeeded -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: osd_prepare_status
+  retries: 50
+  delay: 5
+  until: "osd_prepare_status.stdout_lines[0]=='ok'" 
+
+- name: waiting for start rook-ceph-osd...
+  run_once: true
+  shell: |
+    STATUS="ok"
+    NAME_SPACE="rook-ceph"
+    POD_LABEL="app=rook-ceph-osd"
+
+    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                    --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+      do
+        if [ -n "$POD_NAME" ];then
+          STATUS="bad"
+        fi
+      done
+
+    echo $STATUS
+  register: osd_status
+  retries: 50
+  delay: 5
+  until: "osd_status.stdout_lines[0]=='ok'" 
+
+- name: deploy K8s_manifest/rook-1.4.1/toolbox.yaml
+  run_once: true
+  shell: "kubectl apply -f K8s_manifest/rook-1.4.1/toolbox.yaml"  
+
+- name: deploy K8s_manifest/rook-1.4.1/csi/cephfs/storageclass.yaml
+  run_once: true
+  shell: "kubectl apply -f K8s_manifest/rook-1.4.1/csi/{{ ceph_type }}/storageclass.yaml"
+
+- name: pause 5sec
+  run_once: true
+  pause:
+    seconds: "5"  
+
+- name: deploy K8s_manifest/rook-1.4.1/filesystem.yaml
+  run_once: true
+  shell: "kubectl apply -f K8s_manifest/rook-1.4.1/filesystem.yaml"
+  when: ceph_type=="cephfs"
+
+- debug:
+    msg: "Welcome to Storage Numa!!!"

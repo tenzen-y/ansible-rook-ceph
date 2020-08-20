@@ -1,0 +1,3 @@
+---
+- import_tasks: "kubeadm.yaml"
+- import_tasks: "iplink.yaml"

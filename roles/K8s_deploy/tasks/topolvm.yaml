@@ -1,0 +1,58 @@
+- name: deploy topolvm
+  run_once: true
+  shell: |
+    kubectl label ns kube-system topolvm.cybozu.com/webhook=ignore
+    kubectl label namespace cert-manager topolvm.cybozu.com/webhook=ignore
+    kustomize build $HOME/K8s_manifest/topolvm/overlays/daemonset-scheduler | kubectl apply -f -
+
+- name: pause 5 sec
+  run_once: true
+  pause:
+    seconds: "5"
+
+- name: waiting for start node pod in ns, topolvm-system...
+  run_once: true
+  shell: |
+    STATUS="bad"
+    NAME_SPACE="topolvm-system"
+    POD_LABEL="app.kubernetes.io/name=node"
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+
+    if [ -z "$POD_NAME" ];then
+      STATUS="ok"
+    fi
+
+    echo $STATUS
+  register: topolvm_node_status
+  retries: 50
+  delay: 5
+  until: "topolvm_node_status.stdout_lines[0]=='ok'"
+
+- name: deploy topolvm/certificates.yaml
+  run_once: true
+  shell: "kubectl apply -f $HOME/K8s_manifest/topolvm/base/certificates.yaml"
+
+- name: pause 5 sec
+  run_once: true
+  pause:
+    seconds: "5"
+
+- name: waiting for start controller pod in ns, topolvm-system...
+  run_once: true
+  shell: |
+    STATUS="bad"
+    NAME_SPACE="topolvm-system"
+    POD_LABEL="app.kubernetes.io/name=controller"
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+                --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
+
+    if [ -z "$POD_NAME" ];then
+      STATUS="ok"
+    fi
+
+    echo $STATUS
+  register: topolvm_controller_status
+  retries: 50
+  delay: 5
+  until: "topolvm_controller_status.stdout_lines[0]=='ok'"

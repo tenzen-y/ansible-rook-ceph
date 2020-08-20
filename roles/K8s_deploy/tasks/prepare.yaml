@@ -1,0 +1,14 @@
+- name: copy K8s manifest to master
+  copy:
+    src: "../files/manifests/"
+    dest: "$HOME/K8s_manifest"
+
+# - name: Schedule Pods on the control-plane node
+#   run_once: true
+#   shell: "kubectl taint nodes {{ item }} node-role.kubernetes.io/master-"
+#   with_items:
+#     - "{{ groups['masterGroup'] }}"
+
+- name: Spread coredns pods
+  run_once: true
+  shell: "kubectl apply -f $HOME/K8s_manifest/coredns/coredns.yaml"

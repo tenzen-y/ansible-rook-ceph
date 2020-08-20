@@ -1,0 +1,22 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: v{{ K8s_version }}
+scheduler:
+  extraVolumes:
+    - name: "config"
+      hostPath: /etc/kubernetes/topolvm/
+      mountPath: /var/lib/scheduler
+      readOnly: true
+  extraArgs:
+    config: /var/lib/scheduler/scheduler-config.yaml
+apiServer:
+  certSANs:
+  - "{{ keepalived_configuration.APISERVER_VIP }}"
+controlPlaneEndpoint: "{{ keepalived_configuration.APISERVER_VIP }}:6443"
+networking:
+  podSubnet: "10.244.0.0/16"
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+localAPIEndpoint:
+  bindPort: 6444

@@ -1,0 +1,9 @@
+- name: vgremove {{ vg_configuration.VGNAME }}
+  become: true
+  shell: |
+    vgremove -f -y "{{ vg_configuration.VGNAME }}"
+
+- name: pvremove all
+  become: true
+  shell: |
+    pvremove `pvs | sed -e 's/\ /\n/g' | grep "/dev"`

@@ -1,0 +1,4 @@
+---
+- hosts: topolvmClusterNodes
+  roles:
+    - topolvm

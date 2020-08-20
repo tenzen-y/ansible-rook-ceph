@@ -1,0 +1,11 @@
+- name: mkdir "/etc/haproxy"
+  become: true
+  file: 
+    path: "/etc/haproxy"
+    state: "directory"
+
+- name: set haproxy config
+  become: true
+  template:
+    src: "../templates/haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"

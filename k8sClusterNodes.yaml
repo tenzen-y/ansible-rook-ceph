@@ -1,0 +1,10 @@
+---
+- hosts: masterGroup
+  roles:
+  - control_plane/master
+- hosts: backupGroup
+  roles:
+  - control_plane/backup
+- hosts: Nodes
+  roles:
+  - worker

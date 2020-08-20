@@ -1,0 +1,26 @@
+- name: mkdir /etc/kubernetes/topolvm
+  become: true
+  file: 
+    path: "/etc/kubernetes/topolvm"
+    state: "directory"
+
+- name: copy "scheduler-config.yaml" and "shceduler-policy.cfg" to /etc/kubernetes/topolvm/
+  become: true
+  copy: 
+    src: "../files/{{ item }}" 
+    dest: "/etc/kubernetes/topolvm/"
+  with_items:
+    - scheduler-config.yaml
+    - scheduler-policy.cfg
+
+- name: mkdir /etc/kubeadm
+  become: true
+  file: 
+    path: "/etc/kubeadm"
+    state: "directory"
+
+- name: copy kubeadm_config.yaml
+  become: true
+  template:
+    src: "../templates/kubeadm_config.yaml.j2"
+    dest: "/etc/kubeadm/kubeadm_config.yaml"

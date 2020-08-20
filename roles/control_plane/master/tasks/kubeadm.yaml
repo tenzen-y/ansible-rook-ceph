@@ -1,0 +1,85 @@
+- name: kubeadm init
+  become: true
+  shell: |
+    KUBEADM_INIT=$(sudo kubeadm init --upload-certs --config=/etc/kubeadm/kubeadm_config.yaml | grep -e "--control-plane" -e "--certificate-key")
+    for SPLIT_SPACE in `echo ${KUBEADM_INIT} | tr ' ' '\n'`
+      do
+        if [ `echo ${SPLIT_SPACE} | grep -v -e "--control-plane" -e "--certificate-key"` ];then
+          echo ${SPLIT_SPACE}
+        fi
+      done
+  register: certificate_key_return
+
+- name: get discovery-token-ca-cert-hash
+  shell: "openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'"
+  register: discovery_token_ca_cert_return
+
+- name: get token
+  become: true
+  shell: |
+    TOKEN_INFO=$(kubeadm token list | grep "authentication,signing")
+    COUNTER=0
+    for BOOSTRAP_TOKEN in `echo ${TOKEN_INFO} | tr ' ' '\n'`
+      do
+        if [ ${COUNTER} = 0 ];then
+          echo ${BOOSTRAP_TOKEN}
+        fi
+        COUNTER=`expr ${COUNTER} + 1`
+      done
+  register: token_return
+
+- name: set K8s certification key.
+  set_fact:
+    TOKEN: "{{ token_return.stdout_lines[0] }}"
+    DISCOVERY_TOKEN_CA_CERT: "{{ discovery_token_ca_cert_return.stdout_lines[0] }}"
+    CERTIFICATE_KEY: "{{ certificate_key_return.stdout_lines[0] }}"
+
+- name: debug certification vars, TOKEN
+  debug:
+    var: token_return.stdout_lines[0]
+
+- name: debug certification vars, DISCOVERY_TOKEN_CA_CERT
+  debug:
+    var: discovery_token_ca_cert_return.stdout_lines[0]
+
+- name: debug certification vars, CERTIFICATE_KEY
+  debug:
+    var: certificate_key_return.stdout_lines[0]
+
+- name: mkdir -p $HOME/.kube
+  file: 
+    path: "${HOME}/.kube"
+    state: "directory"
+    owner: "{{ ansible_effective_user_id }}"
+    group: "{{ ansible_effective_group_id }}" 
+
+- name: chmod /etc/kubernetes/admin.conf
+  become: true
+  file:
+    dest: "/etc/kubernetes/admin.conf"
+    mode: "604"
+
+- name: copy /etc/kubernetes/admin.conf to $HOME/.kube/config in remote host
+  shell: "cp /etc/kubernetes/admin.conf $HOME/.kube/config"
+
+- name: return "/etc/kubernetes/admin.conf" mode
+  become: true
+  file:
+    dest: "/etc/kubernetes/admin.conf"
+    mode: "600"
+
+- name: completion kubectl
+  shell: echo 'source <(kubectl completion bash)' >>~/.bashrc
+
+- name: completion kubectl
+  become: true
+  shell: kubectl completion bash >/etc/bash_completion.d/kubectl
+
+- name: alias kubectl
+  shell: |
+    echo 'alias k=kubectl' >>~/.bashrc
+    echo 'complete -F __start_kubectl k' >>~/.bashrc
+
+- name: deploy flannel
+  run_once: true
+  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"

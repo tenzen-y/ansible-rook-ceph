@@ -1,0 +1,12 @@
+- name: mkdir "/etc/keepalived"
+  become: true
+  file: 
+    path: "/etc/keepalived"
+    state: "directory"
+
+- name: set check_apiserver.sh for keepalived
+  become: true
+  template:
+    src: "../templates/check_apiserver.sh.j2"
+    dest: "/etc/keepalived/check_apiserver.sh"
+    mode: "0744"

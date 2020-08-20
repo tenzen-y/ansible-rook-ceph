@@ -1,0 +1,45 @@
+- name: kubeadm reset
+  become: true
+  shell: "kubeadm reset -f"
+
+- name: delete /etc/kubernetes
+  become: true
+  file:
+    path: "/etc/kubernetes"
+    state: absent
+
+- name: delete /etc/kubeadm
+  become: true
+  file:
+    path: "/etc/kubeadm"
+    state: absent
+  when: "'controlPlaneNodes' in group_names"
+
+- name: delete ~/.kube
+  file:
+    path: "$HOME/.kube"
+    state: absent
+  when: "'controlPlaneNodes' in group_names"
+
+- name: delete K8s_manifest
+  file:
+    path: "$HOME/K8s_manifest"
+    state: absent
+  when: "'controlPlaneNodes' in group_names"
+
+- name: delete /etc/haproxy, /etc/keepalived
+  become: true
+  file:
+    state: absent
+    path: "/etc/{{ item }}"
+  with_items:
+    - "haproxy"
+    - "keepalived"
+  when: "'controlPlaneNodes' in group_names"    
+
+- name: delete /var/lib/etcd
+  become: true
+  file:
+    state: absent
+    path: "/var/lib/etcd"
+  when: "'controlPlaneNodes' in group_names"

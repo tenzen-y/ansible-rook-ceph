@@ -1,0 +1,7 @@
+- name: allow ports for Kubernetes
+  become: true
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop:
+  - "9251"

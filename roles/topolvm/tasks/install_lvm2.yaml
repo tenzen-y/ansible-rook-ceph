@@ -1,0 +1,20 @@
+- name: apt update and install packages from apt
+  become: true
+  apt: 
+    update_cache: yes
+    name: 
+    - lvm2
+
+- name: vgcreate '{{ vg_configuration.VGNAME }}'
+  become: true
+  shell: |
+    OS_DISK=$(ls -al /dev/disk/by-id/ | sed -e 's/\ /\n/g' | grep scsi | grep .*-part. | sed -n 1P | sed -e 's/\-part.//g')
+
+    for ID in `ls -al /dev/disk/by-id/ | grep -v -e 'sr0' -e $OS_DISK | sed -e 's/\ /\n/g' | grep 'scsi'`
+      do
+        if [ `vgs | sed -e 's/\ /\n/g' | grep -x '{{ vg_configuration.VGNAME }}'` ]; then
+          vgextend '{{ vg_configuration.VGNAME }}' /dev/disk/by-id/$ID
+        else
+          vgcreate '{{ vg_configuration.VGNAME }}' /dev/disk/by-id/$ID
+        fi
+      done

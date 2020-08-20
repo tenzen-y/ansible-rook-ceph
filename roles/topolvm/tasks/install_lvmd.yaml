@@ -1,0 +1,26 @@
+- name: mkdir /opt/sbin/lvmd
+  become: true
+  file: 
+    path: "/opt/sbin"
+    state: "directory"
+
+- name: copy lvmd to /opt/sbin/
+  become: true
+  copy:
+    src: "../files/lvmd"
+    dest: "/opt/sbin/lvmd"
+    mode: "0744"
+
+- name: copy lvmd.service to /etc/systemd/system/
+  become: true
+  copy:
+    src: "../files/lvmd.service"
+    dest: "/etc/systemd/system/lvmd.service"
+    mode: "0744"
+
+- name: start lvmd by systemd
+  become: true
+  systemd:
+    name: lvmd
+    enabled: yes
+    state: restarted

@@ -1,0 +1,17 @@
+---
+- hosts: deployerGroup
+  roles:
+  - K8s_delete
+- hosts: Nodes
+  roles:
+  - reset_cluster
+- hosts: controlPlaneNodes
+  serial: 1
+  roles:
+  - reset_cluster
+- hosts: topolvmClusterNodes
+  roles:
+  - delete_lvm
+- hosts: all
+  roles:
+  - reset_env

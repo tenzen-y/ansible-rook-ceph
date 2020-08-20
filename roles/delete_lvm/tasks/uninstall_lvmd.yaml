@@ -1,0 +1,18 @@
+- name: stop lvmd by systemd
+  become: true
+  systemd:
+    name: lvmd
+    state: stopped
+    enabled: no
+
+- name: remove /etc/systemd/system/lvmd.service
+  become: true
+  file:
+    path: "/etc/systemd/system/lvmd.service"
+    state: absent
+
+- name: remove /opt/sbin
+  become: true
+  file: 
+    path: "/opt/sbin"
+    state: absent

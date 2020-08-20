@@ -1,0 +1,12 @@
+- name: ip link delete cni0, flannel.1
+  become: true
+  shell: |
+    # if there is cni0, delete it.
+    if [ "`ip link | grep cni0`" ];then
+      ip link delete cni0
+    fi
+
+    # if there is flannel.1, delete it.
+    if [ "`ip link | grep "flannel.1"`" ];then
+      ip link delete flannel.1
+    fi

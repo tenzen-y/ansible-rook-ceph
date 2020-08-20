@@ -1,0 +1,7 @@
+---
+- import_tasks: "install_helm3.yaml"
+- import_tasks: "install_kustomize.yaml"
+- import_tasks: "prepare.yaml"
+- import_tasks: "certmanager.yaml"
+- import_tasks: "topolvm.yaml"
+- import_tasks: "rook_ceph.yaml"

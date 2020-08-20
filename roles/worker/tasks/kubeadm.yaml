@@ -1,0 +1,22 @@
+- name: set kubeadm certification value.
+  debug:
+    msg: "{{ hostvars[item]['TOKEN'] }}"
+  with_items: "{{ groups['masterGroup'][0] }}"
+
+- name: set kubeadm certification value.
+  debug:
+    msg: "{{ hostvars[item]['DISCOVERY_TOKEN_CA_CERT'] }}"
+  with_items: "{{ groups['masterGroup'][0] }}"
+
+- name: set kubeadm certification value.
+  debug:
+    msg: "{{ hostvars[item]['CERTIFICATE_KEY'] }}"
+  with_items: "{{ groups['masterGroup'][0] }}"
+
+- name: kubeadm join worker nodes.
+  become: true 
+  shell: |
+    kubeadm join {{ keepalived_configuration.APISERVER_VIP }}:6443 \
+          --token {{ hostvars[item]['TOKEN'] }} \
+          --discovery-token-ca-cert-hash sha256:{{ hostvars[item]['DISCOVERY_TOKEN_CA_CERT'] }} \
+  with_items: "{{ groups['masterGroup'][0] }}"

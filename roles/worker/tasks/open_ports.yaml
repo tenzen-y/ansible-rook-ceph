@@ -1,0 +1,23 @@
+- name: allow ports for Kubernetes
+  become: true
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop: 
+  - "53"
+  - "8225"
+  - "8472"
+  - "9153"
+  - "10250"
+  - "10000"
+  - "6444"
+  - "31416"
+
+- name: allow tcp ports for Kubernetes
+  become: true
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: 
+  - "30000:32767"

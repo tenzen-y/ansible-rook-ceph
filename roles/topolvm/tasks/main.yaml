@@ -1,0 +1,4 @@
+---
+- import_tasks: open_ports.yaml
+- import_tasks: install_lvm2.yaml
+- import_tasks: install_lvmd.yaml

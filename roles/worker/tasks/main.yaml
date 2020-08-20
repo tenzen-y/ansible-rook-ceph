@@ -1,0 +1,3 @@
+---
+- import_tasks: "open_ports.yaml"
+- import_tasks: "kubeadm.yaml"

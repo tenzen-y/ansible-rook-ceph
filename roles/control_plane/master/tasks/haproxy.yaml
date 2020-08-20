@@ -1,0 +1,12 @@
+- name: mkdir "/etc/kubernetes/manifests/haproxy.yaml"
+  become: true
+  file: 
+    path: "/etc/kubernetes/manifests"
+    state: "directory"
+
+- name: create haproxy.yaml
+  run_once: true
+  become: true
+  copy:
+    dest: "/etc/kubernetes/manifests/haproxy.yaml"
+    src: "../../files/haproxy.yaml"

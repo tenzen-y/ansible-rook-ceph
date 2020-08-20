@@ -1,0 +1,3 @@
+keepalived_backup:
+  STATE: "BACKUP"
+  PRIORITY: "100"
