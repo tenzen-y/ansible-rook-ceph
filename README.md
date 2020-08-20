@@ -4,8 +4,9 @@ This playbook construct 2 components.
 1. Multi Master K8s Cluster
 2. Rook/Ceph
 
-readme.md in Japanese.
+* readme.md in Japanese.
 
+    [てんぜんの生存日記](https://tenzen.hatenablog.com/entry/2020/08/20/203448)
 
 ## prepare
 
