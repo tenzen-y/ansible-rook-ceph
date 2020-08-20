@@ -4,7 +4,7 @@
 
 In default, volume group is created to use 'scsi' storage devices by lvm2.
 
-If you use 'nvme' or 'ata' storage drive, you must edit file, 'role/topolvm/tasks/install_lvm2.yaml'.
+If you use 'nvme' or 'ata' storage device, you must edit file, 'role/topolvm/tasks/install_lvm2.yaml'.
 
 Method to check using device type.
 
@@ -14,9 +14,7 @@ ata-SanDisk_SDSSDH3_500G_xxxxxxxxxxxxxx
 nvme-INTEL_SSDPED1D960GAY_xxxxxxxxxxxxx
 ```
 
-You need edit line 11 and line 13 of task, "vgcreate '{{ vg_configuration.VGNAME }}'" (role/topolvm/tasks/install_lvm2.yaml)
-
-You need replace 'scsi' of 2 parts to 'ata' or 'nvme' in the following code. 
+You need replace 'scsi' of 2 parts to 'ata' or 'nvme' in the following code that line 11 and line 13 of task, "vgcreate '{{ vg_configuration.VGNAME }}'". 
 
 ```
 OS_DISK=$(ls -al /dev/disk/by-id/ | sed -e 's/\ /\n/g' | grep scsi | grep .*-part. | sed -n 1P | sed -e 's/\-part.//g')
