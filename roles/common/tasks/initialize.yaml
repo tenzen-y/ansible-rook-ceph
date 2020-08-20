@@ -1,7 +1,7 @@
 - name: apt update & apt upgrade
   become: true
   apt:
-    upgrade: full
+    upgrade: safe
     update_cache: yes
     state: latest   
 

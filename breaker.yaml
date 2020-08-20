@@ -1,10 +1,4 @@
 ---
-- hosts: deployerGroup
-  roles:
-  - K8s_delete
-- hosts: Nodes
-  roles:
-  - reset_cluster
 - hosts: controlPlaneNodes
   serial: 1
   roles:

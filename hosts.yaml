@@ -41,6 +41,8 @@ all:
         vm-m0:
         vm-m1:
         vm-m2:
+      vars:
+        constitution: redundant
     Nodes:
       hosts:
         vm-w0:

@@ -3,11 +3,12 @@
     src: "../files/manifests/"
     dest: "$HOME/K8s_manifest"
 
-# - name: Schedule Pods on the control-plane node
-#   run_once: true
-#   shell: "kubectl taint nodes {{ item }} node-role.kubernetes.io/master-"
-#   with_items:
-#     - "{{ groups['masterGroup'] }}"
+- name: Schedule Pods on the control-plane node
+  run_once: true
+  shell: "kubectl taint nodes {{ item }} node-role.kubernetes.io/master-"
+  with_items:
+    - "{{ groups['controlPlaneNodes'] }}"
+  when: constitution=="minimum"
 
 - name: Spread coredns pods
   run_once: true

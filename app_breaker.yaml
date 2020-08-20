@@ -1,0 +1,4 @@
+---
+- hosts: deployerGroup
+  roles:
+  - K8s_delete

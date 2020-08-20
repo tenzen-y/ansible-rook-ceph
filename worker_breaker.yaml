@@ -1,0 +1,4 @@
+---
+- hosts: Nodes
+  roles:
+  - reset_cluster
