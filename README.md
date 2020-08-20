@@ -1,6 +1,6 @@
 # README
 
-This playbook construct
+This playbook construct 2 components.
 1. Multi Master K8s Cluster
 2. Rook/Ceph
 
