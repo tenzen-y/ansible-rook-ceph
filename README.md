@@ -16,7 +16,7 @@ This playbook construct 2 components.
 
 If create VMs by ESXi, you must check the following document.
 
-[Creating VMs by ESXi](docs/trouble_shoot.md/#Creating VMs by ESXi)
+[Creating VMs by ESXi](docs/trouble_shoot.md#creating-vms-by-esxi)
 
 ## Quick Start Guide
 
