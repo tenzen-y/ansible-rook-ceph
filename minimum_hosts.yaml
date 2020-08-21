@@ -1,44 +1,44 @@
 all:
   hosts:
-    vm-w3:
-      ansible_ssh_user: vm-w3
-    vm-w4:
-      ansible_ssh_user: vm-w4
-    vm-w5:
-      ansible_ssh_user: vm-w5
+    vm-w0:
+      ansible_ssh_user: vm-w0
+    vm-w1:
+      ansible_ssh_user: vm-w1
+    vm-w2:
+      ansible_ssh_user: vm-w2
   children:
     controlPlaneNodes:
       children:
         masterGroup:      
           hosts:
-            vm-w3:
+            vm-w0:
         backupGroup:
           hosts:
-            vm-w4:          
-            vm-w5:
+            vm-w1:          
+            vm-w2:
     topolvmClusterNodes:
       hosts:
-        vm-w3:
-        vm-w4:
-        vm-w5:
+        vm-w0:
+        vm-w1:
+        vm-w2:
     deployerGroup:
       hosts:
-        vm-w3:
-        vm-w4:
-        vm-w5:
+        vm-w0:
+        vm-w1:
+        vm-w2:
       vars:
         constitution: minimum
     Nodes:
       hosts:
-        vm-w3:
-        vm-w4:
-        vm-w5:        
+        vm-w0:
+        vm-w1:
+        vm-w2:        
     rackA:
       hosts:
-        vm-w3:
+        vm-w0:
     rackB:
       hosts:    
-        vm-w4:
+        vm-w1:
     rackC:  
       hosts:      
-        vm-w5:
+        vm-w2:
