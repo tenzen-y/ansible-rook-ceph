@@ -363,26 +363,24 @@
   delay: 5
   until: "osd_prepare_status.stdout_lines[0]=='ok'" 
 
-- name: waiting for start rook-ceph-osd...
+- name: waiting for start rook-ceph-osd pod...
   run_once: true
   shell: |
-    STATUS="ok"
+    STATUS="bad"
     NAME_SPACE="rook-ceph"
     POD_LABEL="app=rook-ceph-osd"
 
-    for POD_NAME in `kubectl get po -n $NAME_SPACE -l $POD_LABEL \
+    POD_NAME=`kubectl get po -n $NAME_SPACE -l $POD_LABEL \
                     --field-selector status.phase!=Running -o jsonpath='{.items[*].metadata.name}'`
-      do
-        if [ -n "$POD_NAME" ];then
-          STATUS="bad"
-        fi
-      done
+    if [ -z "$POD_NAME" ];then
+      STATUS="ok"
+    fi
 
     echo $STATUS
   register: osd_status
   retries: 50
   delay: 5
-  until: "osd_status.stdout_lines[0]=='ok'" 
+  until: "osd_status.stdout_lines[0]=='ok'"
 
 - name: deploy K8s_manifest/rook-1.4.1/toolbox.yaml
   run_once: true

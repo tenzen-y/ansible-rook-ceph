@@ -1,6 +1,6 @@
 # Trouble Shooting
 
-# Could not create VolumeGroup by lvm2.
+## Could not create VolumeGroup by lvm2.
 
 In default, volume group is created to use 'scsi' storage devices by lvm2.
 

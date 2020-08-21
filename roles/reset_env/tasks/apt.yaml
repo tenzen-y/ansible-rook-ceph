@@ -18,9 +18,3 @@
     purge: true
     autoremove: true
     name: docker-ce
-
-- name: remove /var/lib/kubelet
-  become: true
-  file:
-    path: "/var/lib/kubelet"
-    state: absent

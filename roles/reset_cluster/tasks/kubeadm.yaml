@@ -43,3 +43,9 @@
     state: absent
     path: "/var/lib/etcd"
   when: "'controlPlaneNodes' in group_names"
+
+- name: remove /var/lib/kubelet
+  become: true
+  file:
+    path: "/var/lib/kubelet"
+    state: absent  
