@@ -11,9 +11,9 @@ You need build 3 VMs.
 * Notes
     * __You must build 3 VMs for K8s Master role.__
     * __You must build 3 VMs for K8s Worker role.__
-    * __You must attach 3 or more storage devices exclude OS drive, which it is 20GB or more.__
+    * __You must have a minimum of three 20GB storage devices on your all VMs ,excluding OS drive.__
 
-I have tested it in the following environments.
+I have tested it in the following environments by Hyper-V.
 
 |                          |  K8s Master and Worker VM  |
 | ------------------------ | -------------------------- |
@@ -65,37 +65,37 @@ Using variable list
 
 3. Run shell script
 
-    This Playbook can build 2 type ceph cluster.
+    This Playbook can create 2 type ceph cluster.
 
     1. cephfs
 
-        ```sh
+        ```console
         $ ./minimum_create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP
         ```
 
         Answer password to use ansible-vault.
 
-        ```sh
+        ```console
         New Vault password: 
         Confirm New Vault password:
         ```
 
     2. rbd
 
-        ```sh
+        ```console
         $ $ ./minimum_create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP rbd
         ```
 
         Answer password to use ansible-vault.
 
-        ```sh
+        ```console
         New Vault password: 
         Confirm New Vault password:
         ```
 
     If all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
 
-    ```sh
+    ```console
     # kubernetes cluster nodes
     vm-ws0@vm-w0:~$ k get nodes
     NAME    STATUS   ROLES    AGE   VERSION
@@ -159,12 +159,12 @@ Using variable list
 
 1. cephfs
 
-    ```sh
+    ```console
     $ ansible-playbook -i minimum_hosts delete-cluster.yaml
     ```
 
 2. rbd
 
-    ```sh
+    ```console
     $ ansible-playbook -i minimum_hosts delete-cluster.yaml -e ceph_type=rbd
     ```

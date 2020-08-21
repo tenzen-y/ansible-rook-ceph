@@ -11,7 +11,7 @@ You need build 6 or more VMs.
 * Notes
     * __You must build 3 or more VMs for K8s Master role.__
     * __You must build 3 or more VMs for K8s Worker role.__
-    * __You must attach 3 or more storage devices exclude OS drive, which it is 20GB or more.__
+    * __You must have a minimum of three 20GB storage devices on all K8s Worker VMs, excluding OS drive.__
 
 
 I have tested it in the following environments.
@@ -96,37 +96,37 @@ Using variable list
 
 3. Run shell script
 
-    This Playbook can build 2 type ceph cluster.
+    This Playbook can create 2 type ceph cluster.
 
     1. cephfs
 
-        ```sh
+        ```console
         $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP
         ```
 
         Answer password to use ansible-vault.
 
-        ```sh
+        ```console
         New Vault password: 
         Confirm New Vault password:
         ```
 
     2. rbd
 
-        ```sh
+        ```console
         $ $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP rbd
         ```
 
         Answer password to use ansible-vault.
 
-        ```sh
+        ```console
         New Vault password: 
         Confirm New Vault password:
         ```
 
     If all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
 
-    ```sh
+    ```console
     # pods in ns, rook-ceph
     vm-m0@vm-m0:~$ k get pod -n rook-ceph 
     NAME                                                            READY   STATUS      RESTARTS   AGE
@@ -184,12 +184,12 @@ Using variable list
 
 1. cephfs
 
-    ```sh
+    ```console
     $ ansible-playbook -i hosts delete-cluster.yaml
     ```
 
 2. rbd
 
-    ```sh
+    ```console
     $ ansible-playbook -i hosts delete-cluster.yaml -e ceph_type=rbd
     ```

@@ -14,6 +14,10 @@ This playbook construct 2 components.
 * __All VM must be running ssh server.__
 * __Client machine must be installed sshpass.__
 
+If create VMs by ESXi, you must check the following document.
+
+[Creating VMs by ESXi](docs/trouble_shoot.md/#Creating VMs by ESXi)
+
 ## Quick Start Guide
 
 * [minimum cluster](docs/minimum.md)
