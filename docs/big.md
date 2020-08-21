@@ -114,7 +114,7 @@ Using variable list
     2. rbd
 
         ```console
-        $ $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP rbd
+        $ ./create.sh $SSH_CONF_PATH $SSH_KEY_PATH $VM_SUDO_PASS $KUBE_VIP rbd
         ```
 
         Answer password to use ansible-vault.
@@ -124,7 +124,7 @@ Using variable list
         Confirm New Vault password:
         ```
 
-    If all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
+    When all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
 
     ```console
     # pods in ns, rook-ceph

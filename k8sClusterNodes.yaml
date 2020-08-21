@@ -3,6 +3,7 @@
   roles:
   - control_plane/master
 - hosts: backupGroup
+  serial: 1
   roles:
   - control_plane/backup
 - hosts: Nodes

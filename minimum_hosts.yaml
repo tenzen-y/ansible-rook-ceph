@@ -6,6 +6,8 @@ all:
       ansible_ssh_user: vm-w1
     vm-w2:
       ansible_ssh_user: vm-w2
+  vars:
+    constitution: minimum      
   children:
     controlPlaneNodes:
       children:
@@ -26,8 +28,6 @@ all:
         vm-w0:
         vm-w1:
         vm-w2:
-      vars:
-        constitution: minimum
     Nodes:
       hosts:
         vm-w0:

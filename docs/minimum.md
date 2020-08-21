@@ -93,7 +93,7 @@ Using variable list
         Confirm New Vault password:
         ```
 
-    If all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
+    When all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
 
     ```console
     # kubernetes cluster nodes

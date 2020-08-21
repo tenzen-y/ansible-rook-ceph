@@ -18,6 +18,8 @@ all:
       ansible_ssh_user: vm-w4
     vm-w5:
       ansible_ssh_user: vm-w5
+  vars:
+    constitution: redundant      
   children:
     controlPlaneNodes:
       children:
@@ -41,8 +43,6 @@ all:
         vm-m0:
         vm-m1:
         vm-m2:
-      vars:
-        constitution: redundant
     Nodes:
       hosts:
         vm-w0:
