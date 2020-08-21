@@ -28,7 +28,7 @@ for ID in `ls -al /dev/disk/by-id/ | grep -v -e 'sr0' -e $OS_DISK | sed -e 's/\ 
 
 LVM search storage devices to create volume group from /dev/disk/by-id in this Playbook.
 
-Following Site, There is no link in /dev/disk/by-id
+Following site, There is no link in /dev/disk/by-id
 
 https://www.suse.com/support/kb/doc/?id=000016951
 
