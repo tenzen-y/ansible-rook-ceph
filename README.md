@@ -13,8 +13,8 @@ This playbook construct 2 components.
 
 ## Notes
 
-* __All VM must access to network.__
-* __All VM must be running ssh server.__
+* __All VMs must access to network.__
+* __All VMs must be running ssh server.__
 * __Client machine must be installed sshpass.__
 
 If create VMs by ESXi, you must check the following document.
