@@ -4,7 +4,7 @@ Ansible-rook-ceph is an ansible playbook for bare metal server.
 
 This playbook construct 2 components.
 1. Multi Master [Kubernetes](https://github.com/kubernetes/kubernetes) Cluster
-2. [Rook/Ceph](https://github.com/rook/rook)
+2. [Rook](https://github.com/rook/rook)/Ceph
 
 
 * README in Japanese.
