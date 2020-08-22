@@ -1,8 +1,11 @@
-# Quick Create ROOK/CEPH Env for bare metal server
+# ansible-rook-ceph
+
+Ansible-rook-ceph is an ansible playbook for bare metal server.
 
 This playbook construct 2 components.
-1. Multi Master K8s Cluster
-2. Rook/Ceph
+1. [Multi Master K8s Cluster](https://github.com/kubernetes/kubernetes)
+2. [Rook/Ceph](https://github.com/rook/rook)
+
 
 * README in Japanese.
 
