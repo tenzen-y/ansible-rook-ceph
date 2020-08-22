@@ -1,3 +1,6 @@
 ---
+- import_tasks: "uninstall_K8s_pkgmanager.yaml"
+- import_tasks: "docker.yaml"
 - import_tasks: "apt.yaml"
 - import_tasks: "ufw.yaml"
+- import_tasks: "reboot.yaml"

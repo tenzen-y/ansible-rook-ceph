@@ -127,6 +127,18 @@ Using variable list
     When all processes complete, you get message, 'Welcome to Storage NUMA!!!'.
 
     ```console
+    # kubernetes cluster nodes
+    vm-m0@vm-m0:~$ k get nodes 
+    NAME    STATUS   ROLES    AGE   VERSION
+    vm-m0   Ready    master   31m   v1.18.8
+    vm-m1   Ready    master   27m   v1.18.8
+    vm-m2   Ready    master   23m   v1.18.8
+    vm-w0   Ready    <none>   20m   v1.18.8
+    vm-w1   Ready    <none>   20m   v1.18.8
+    vm-w2   Ready    <none>   20m   v1.18.8
+    vm-w3   Ready    <none>   20m   v1.18.8
+    vm-w4   Ready    <none>   20m   v1.18.8
+    vm-w5   Ready    <none>   20m   v1.18.8    
     # pods in ns, rook-ceph
     vm-m0@vm-m0:~$ k get pod -n rook-ceph 
     NAME                                                            READY   STATUS      RESTARTS   AGE

@@ -1,0 +1,30 @@
+- name: delete /etc/kubeadm
+  become: true
+  file:
+    path: "/etc/kubeadm"
+    state: absent
+
+- name: delete ~/.kube
+  file:
+    path: "$HOME/.kube"
+    state: absent
+
+- name: delete K8s_manifest
+  file:
+    path: "$HOME/K8s_manifest"
+    state: absent
+
+- name: delete /etc/haproxy, /etc/keepalived
+  become: true
+  file:
+    state: absent
+    path: "/etc/{{ item }}"
+  with_items:
+    - "haproxy"
+    - "keepalived"
+
+- name: delete /var/lib/etcd
+  become: true
+  file:
+    state: absent
+    path: "/var/lib/etcd"

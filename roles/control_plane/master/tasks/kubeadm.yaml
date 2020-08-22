@@ -1,7 +1,7 @@
 - name: kubeadm init
   become: true
   shell: |
-    KUBEADM_INIT=$(sudo kubeadm init --upload-certs --config=/etc/kubeadm/kubeadm_config.yaml | grep -e "--control-plane" -e "--certificate-key")
+    KUBEADM_INIT=$(kubeadm init --upload-certs --config=/etc/kubeadm/kubeadm_config.yaml | grep -e "--control-plane" -e "--certificate-key")
     for SPLIT_SPACE in `echo ${KUBEADM_INIT} | tr ' ' '\n'`
       do
         if [ `echo ${SPLIT_SPACE} | grep -v -e "--control-plane" -e "--certificate-key"` ];then

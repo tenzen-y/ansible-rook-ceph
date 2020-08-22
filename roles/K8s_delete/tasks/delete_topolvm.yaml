@@ -1,0 +1,23 @@
+- name: delete topolvm/certificates.yaml
+  run_once: true
+  shell: "kubectl delete -f $HOME/K8s_manifest/topolvm/base/certificates.yaml"
+
+- name: delete topolvm
+  run_once: true
+  shell: |
+    kustomize build $HOME/K8s_manifest/topolvm/overlays/daemonset-scheduler | kubectl delete -f -
+    kubectl label ns cert-manager topolvm.cybozu.com/webhook-
+    kubectl label ns kube-system topolvm.cybozu.com/webhook-
+
+- name: waiting for deleted crd deployed topolvm.cybozu.com...
+  run_once: true
+  shell: |
+    STATUS="bad"
+    if [ -z "`kubectl get crd | grep topolvm.cybozu.com`" ];then
+      STATUS="ok"
+    fi
+    echo $STATUS
+  register: crd_topolvm_status
+  retries: 50
+  delay: 5
+  until: "crd_topolvm_status.stdout_lines[0]=='ok'"

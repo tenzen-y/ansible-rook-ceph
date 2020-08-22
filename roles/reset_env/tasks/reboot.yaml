@@ -1,0 +1,7 @@
+- name: all nodes reboot
+  become: true
+  reboot:
+
+- name: output message
+  debug:
+      msg: "Complete !!"

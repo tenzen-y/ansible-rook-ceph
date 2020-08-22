@@ -1,3 +1,5 @@
 ---
 - import_tasks: "kubeadm.yaml"
+- import_tasks: "delete_file.yaml"
+  when: "'controlPlaneNodes' in group_names"
 - import_tasks: "iplink.yaml"

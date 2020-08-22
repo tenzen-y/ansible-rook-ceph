@@ -1,51 +1,25 @@
 - name: kubeadm reset
   become: true
   shell: "kubeadm reset -f"
+   
+- name: waiting for stop kubelet.service
+  become: true
+  shell: |
+    STATUS="bad"
+    SYSTEMD=`systemctl status kubelet.service | grep Active | sed "s/\ /\n/g" \
+                                                    | sed "/^$/d" | grep active`
+    if [ -z "`$SYSTEMD`" ];then
+      STATUS="ok"
+    fi
+
+    echo $STATUS
+  register: kubelet_status
+  retries: 50
+  delay: 5
+  until: "kubelet_status.stdout_lines[0]=='ok'"
 
 - name: delete /etc/kubernetes
   become: true
   file:
     path: "/etc/kubernetes"
     state: absent
-
-- name: delete /etc/kubeadm
-  become: true
-  file:
-    path: "/etc/kubeadm"
-    state: absent
-  when: "'controlPlaneNodes' in group_names"
-
-- name: delete ~/.kube
-  file:
-    path: "$HOME/.kube"
-    state: absent
-  when: "'controlPlaneNodes' in group_names"
-
-- name: delete K8s_manifest
-  file:
-    path: "$HOME/K8s_manifest"
-    state: absent
-  when: "'controlPlaneNodes' in group_names"
-
-- name: delete /etc/haproxy, /etc/keepalived
-  become: true
-  file:
-    state: absent
-    path: "/etc/{{ item }}"
-  with_items:
-    - "haproxy"
-    - "keepalived"
-  when: "'controlPlaneNodes' in group_names"    
-
-- name: delete /var/lib/etcd
-  become: true
-  file:
-    state: absent
-    path: "/var/lib/etcd"
-  when: "'controlPlaneNodes' in group_names"
-
-- name: remove /var/lib/kubelet
-  become: true
-  file:
-    path: "/var/lib/kubelet"
-    state: absent  

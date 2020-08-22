@@ -1,2 +1,4 @@
 ---
 - import_tasks: "delete_rook.yaml"
+- import_tasks: "delete_topolvm.yaml"
+- import_tasks: "delete_certmanager.yaml"

@@ -5,3 +5,9 @@
     purge: true
     autoremove: true
     name: lvm2
+
+- name: delete /var/lib/rook
+  become: true
+  file:
+    state: absent
+    path: "/var/lib/rook"

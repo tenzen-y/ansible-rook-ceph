@@ -19,6 +19,36 @@
   run_once: true
   shell: "kubectl delete -f K8s_manifest/rook-1.4.1/operator.yaml"
 
+- name: waiting for deleted all pods in ns, rook-ceph
+  run_once: true
+  shell: |
+    STATUS="bad"
+    NAME_SPACE="rook-ceph"
+
+    POD_NAME=`kubectl get po -n $NAME_SPACE -o jsonpath='{.items[*].status.phase}'`
+    if [ -z "$POD_NAME" ];then
+      STATUS="ok"
+    fi
+
+    echo $STATUS
+  register: delete_rook_pods_status
+  retries: 50
+  delay: 5
+  until: "delete_rook_pods_status.stdout_lines[0]=='ok'"
+
 - name: delete K8s_manifest/rook-1.4.1/common.yaml
   run_once: true
   shell: "kubectl delete -f K8s_manifest/rook-1.4.1/common.yaml"
+
+- name: waiting for deleted crd deployed rook.io
+  run_once: true
+  shell: |
+    STATUS="bad"
+    if [ -z "`kubectl get crd | grep rook.io`" ];then
+      STATUS="ok"
+    fi
+    echo $STATUS
+  register: crd_rook_status
+  retries: 50
+  delay: 5
+  until: "crd_rook_status.stdout_lines[0]=='ok'"

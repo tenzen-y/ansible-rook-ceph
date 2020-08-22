@@ -11,8 +11,8 @@
     path: "/etc/systemd/system/lvmd.service"
     state: absent
 
-- name: remove /opt/sbin
+- name: remove /opt
   become: true
   file: 
-    path: "/opt/sbin"
+    path: "/opt"
     state: absent

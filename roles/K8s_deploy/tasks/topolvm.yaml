@@ -2,7 +2,7 @@
   run_once: true
   shell: |
     kubectl label ns kube-system topolvm.cybozu.com/webhook=ignore
-    kubectl label namespace cert-manager topolvm.cybozu.com/webhook=ignore
+    kubectl label ns cert-manager topolvm.cybozu.com/webhook=ignore
     kustomize build $HOME/K8s_manifest/topolvm/overlays/daemonset-scheduler | kubectl apply -f -
 
 - name: pause 5 sec

@@ -1,0 +1,32 @@
+- name: helm uninstall cert-manager
+  run_once: true
+  shell: |
+    helm uninstall cert-manager --namespace cert-manager
+
+- name: waiting for deleted cert-manager...
+  run_once: true
+  shell: |
+    STATUS="bad"
+    NAME_SPACE="cert-manager"
+    POD_LABEL="app.kubernetes.io/instance=cert-manager"
+    POD_NAME=`kubectl get po -n $NAME_SPACE -o jsonpath='{.items[*].status.phase}'`
+    if [ -z "$POD_NAME" ];then
+      STATUS="ok"
+    fi
+
+    echo $STATUS
+  register: delete_certmanager_pods_status
+  retries: 50
+  delay: 5
+  until: "delete_certmanager_pods_status.stdout_lines[0]=='ok'"
+
+- name: pause 5sec
+  run_once: true
+  pause:
+    seconds: "5"
+
+- name: delete ns cert-manager
+  run_once: true
+  shell: |
+    kubectl delete ns cert-manager
+    helm repo remove jetstack

@@ -18,3 +18,21 @@
     purge: true
     autoremove: true
     name: docker-ce
+
+- name: delete /var/lib/docker and /var/lib/dockershim
+  become: true
+  file:
+    state: absent
+    path: "/var/lib/{{ item }}"
+  with_items:
+    - docker
+    - dockershim
+
+- name: delete /var/lib/kubelet and /var/lib/cni
+  become: true
+  file:
+    path: "/var/lib/{{ item }}"
+    state: absent
+  with_items:
+    - kubelet
+    - cni    

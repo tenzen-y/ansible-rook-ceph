@@ -1,0 +1,13 @@
+- name: remove all containers
+  become: true
+  shell: |
+    if [ -n "`docker ps -aq`" ];then
+      docker ps -aq | xargs docker rm -f
+    fi
+
+- name: remove all container images
+  become: true
+  shell: |
+    if [ -n "`docker image ls -aq`" ];then
+      docker image ls -aq | xargs docker rmi -f
+    fi
