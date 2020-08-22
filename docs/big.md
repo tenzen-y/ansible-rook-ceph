@@ -6,11 +6,11 @@ This doc explains about Rook/Ceph used big HA K8s Clsuter.
 
 K8s master role share VMs with K8s worker role in minimum HA K8s cluster.
 
-You need build 6 or more VMs.
+You need create 6 or more VMs.
 
 * Notes
-    * __You must build 3 or more VMs for K8s Master role.__
-    * __You must build 3 or more VMs for K8s Worker role.__
+    * __You must create 3 or more VMs for K8s Master role.__
+    * __You must create 3 or more VMs for K8s Worker role.__
     * __You must have a minimum of three 20GB storage devices on all K8s Worker VMs, excluding OS drive.__
 
 

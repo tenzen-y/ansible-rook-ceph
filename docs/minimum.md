@@ -6,11 +6,11 @@ This doc explains about Rook/Ceph used minimum HA K8s Clsuter.
 
 K8s master role share VMs with K8s worker role in minimum HA K8s cluster.
 
-You need build 3 VMs.
+You need create 3 VMs.
 
 * Notes
-    * __You must build 3 VMs for K8s Master role.__
-    * __You must build 3 VMs for K8s Worker role.__
+    * __You must create 3 VMs for K8s Master role.__
+    * __You must create 3 VMs for K8s Worker role.__
     * __You must have a minimum of three 20GB storage devices on your all VMs ,excluding OS drive.__
 
 I have tested it in the following environments by Hyper-V.
