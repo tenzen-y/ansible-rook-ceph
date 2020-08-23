@@ -1,0 +1,7 @@
+ansible.cfg
+test_minimum_hosts.yaml
+test_minimum_create.sh
+group_vars/all/vault.yaml
+group_vars/all/keepalived_conf.yaml
+roles/ssh-copy-id/tasks/ssh.yaml
+.DS_Store
