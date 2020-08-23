@@ -41,13 +41,13 @@ ansible-playbook -i hosts.yaml prepare.yaml -k
 if [ -n "$5" ];then
   if [ $5 == 'rbd' ];then
     echo "!!----------!!"
-    echo "rbd mode"
+    echo "   rbd mode"
     echo "!!----------!!"
     ansible-playbook -i hosts.yaml create-cluster.yaml -e ceph_type=rbd
   fi
 else
   echo "!!------------!!"
-  echo "cephfs mode"
+  echo "  cephfs mode"
   echo "!!------------!!"
   ansible-playbook -i hosts.yaml create-cluster.yaml
 fi
