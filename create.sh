@@ -6,7 +6,8 @@ echo "------------------------------"
 echo "set following value"
 echo "ssh config path: "$1
 echo "ssh public key: "$2
-echo "kube-apiserver vip: "$3
+echo "ansible_sudo_pass: "$3
+echo "kube-apiserver vip: "$4
 echo "------------------------------"
 
 
@@ -39,14 +40,14 @@ ansible-playbook -i hosts.yaml prepare.yaml -k
 
 if [ -n "$5" ];then
   if [ $5 == 'rbd' ];then
-    echo "----------"
+    echo "!!----------!!"
     echo "rbd mode"
-    echo "----------"
+    echo "!!----------!!"
     ansible-playbook -i hosts.yaml create-cluster.yaml -e ceph_type=rbd
   fi
 else
-  echo "------------"
+  echo "!!------------!!"
   echo "cephfs mode"
-  echo "------------"
+  echo "!!------------!!"
   ansible-playbook -i hosts.yaml create-cluster.yaml
 fi
