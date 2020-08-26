@@ -43,16 +43,4 @@
   become: true
   file:
     dest: "/etc/kubernetes/admin.conf"
-    mode: "600"
-
-- name: completion kubectl
-  shell: echo 'source <(kubectl completion bash)' >>~/.bashrc
-
-- name: completion kubectl
-  become: true
-  shell: kubectl completion bash >/etc/bash_completion.d/kubectl
-
-- name: alias kubectl
-  shell: |
-    echo 'alias k=kubectl' >>~/.bashrc
-    echo 'complete -F __start_kubectl k' >>~/.bashrc          
+    mode: "600"       

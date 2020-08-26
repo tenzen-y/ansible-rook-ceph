@@ -16,16 +16,7 @@
 
 - name: get token
   become: true
-  shell: |
-    TOKEN_INFO=$(kubeadm token list | grep "authentication,signing")
-    COUNTER=0
-    for BOOSTRAP_TOKEN in `echo ${TOKEN_INFO} | tr ' ' '\n'`
-      do
-        if [ ${COUNTER} = 0 ];then
-          echo ${BOOSTRAP_TOKEN}
-        fi
-        COUNTER=`expr ${COUNTER} + 1`
-      done
+  shell: "kubeadm token list -ojsonpath='{.token}'"
   register: token_return
 
 - name: set K8s certification key.
@@ -67,18 +58,6 @@
   file:
     dest: "/etc/kubernetes/admin.conf"
     mode: "600"
-
-- name: completion kubectl
-  shell: echo 'source <(kubectl completion bash)' >>~/.bashrc
-
-- name: completion kubectl
-  become: true
-  shell: kubectl completion bash >/etc/bash_completion.d/kubectl
-
-- name: alias kubectl
-  shell: |
-    echo 'alias k=kubectl' >>~/.bashrc
-    echo 'complete -F __start_kubectl k' >>~/.bashrc
 
 - name: deploy flannel
   run_once: true

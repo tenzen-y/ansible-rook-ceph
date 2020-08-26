@@ -24,3 +24,18 @@
   template:
     src: "../templates/kubeadm_config.yaml.j2"
     dest: "/etc/kubeadm/kubeadm_config.yaml"
+
+- name: set kubectl completion to /etc/bash_completion.d/kubectl
+  become: true
+  shell: kubectl completion bash >/etc/bash_completion.d/kubectl
+
+- name: alias kubectl
+  lineinfile:
+    path: "$HOME/.bashrc"
+    state: present
+    insertafter: "EOF"
+    line: "{{ item }}"
+  with_items:
+    - "source <(kubectl completion bash)"
+    - "alias k=kubectl"
+    - "complete -F __start_kubectl k"    
