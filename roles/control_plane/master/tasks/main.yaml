@@ -1,4 +1,5 @@
 ---
+- import_tasks: "install_jq.yaml"
 - import_tasks: "haproxy.yaml"
 - import_tasks: "keepalived.yaml"
 - import_tasks: "kubeadm.yaml"

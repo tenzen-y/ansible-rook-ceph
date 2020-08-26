@@ -16,7 +16,8 @@
 
 - name: get token
   become: true
-  shell: "kubeadm token list -ojsonpath='{.token}'"
+  shell: |
+    kubeadm token list -o json | jq -r 'select(.usages[0] == "authentication") | .token'
   register: token_return
 
 - name: set K8s certification key.
